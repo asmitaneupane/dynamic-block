@@ -15,6 +15,7 @@ import {
 	useBlockProps,
 	ColorPalette,
 	InspectorControls,
+	InnerBlocks,
 } from "@wordpress/block-editor";
 import { useSelect } from "@wordpress/data";
 
@@ -43,6 +44,7 @@ export default function Edit({
 			per_page: 10,
 		});
 	}, []);
+	console.log(posts);
 
 	const onChangeBGColor = (hexColor) => {
 		setAttributes({ bgColor: hexColor });
@@ -67,22 +69,16 @@ export default function Edit({
 					<ColorPalette onChange={onChangeTextColor} />
 				</fieldset>
 			</InspectorControls>
-			{posts &&
-				posts.map((post) => {
-					return (
-						<div key={post.id}>
-							<h3
-								style={{
-									backgroundColor: bgColor,
-									color: textColor,
-								}}
-							>
-								{post.title.rendered}
-							</h3>
-							<p>{post.generated_slug}</p>
-						</div>
-					);
-				})}
+			<InnerBlocks
+				template={[
+					["create-block/column", {}],
+					["create-block/column", {}],
+				]}
+				allowedBlocks={["create-block/column"]}
+				templateLock="all"
+				orientation="horizontal"
+				className="dynamic-column-block"
+			/>
 		</div>
 	);
 }

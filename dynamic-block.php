@@ -63,11 +63,19 @@ function dynamic_block_render_callback( $block_attributes, $content ) {
 function dynamic_block() {
 
 	// automatically load dependencies and version
-    $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
+    $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/blocks/columns/index.asset.php');
+    $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/blocks/column/index.asset.php');
 
 	wp_register_script(
         'dynamic_block',
-        plugins_url( 'build/index.js', __FILE__ ),
+        plugins_url( 'build/blocks/columns/index.js', __FILE__ ),
+        $asset_file['dependencies'],
+        $asset_file['version']
+    );
+
+    wp_register_script(
+        'column_block',
+        plugins_url( 'build/blocks/column/index.js', __FILE__ ),
         $asset_file['dependencies'],
         $asset_file['version']
     );
@@ -84,7 +92,39 @@ function dynamic_block() {
         'render_callback' => 'dynamic_block_render_callback',
         'skip_inner_blocks' => true,
         'editor_script' =>  'dynamic_block',
-
     ) );
+
+    register_block_type(
+        'create-block/column',
+        array(
+        'api_version' => 3,
+        'category' => 'Dynamic Blocks',
+        'attributes' => array(
+            'bgColor' => array( 'type' => 'string' ),
+            'textColor' => array('type' => 'string' ),
+        ),
+        'render_callback' => 'dynamic_block_render_callback',
+        'skip_inner_blocks' => true,
+        'editor_script' =>  'column_block',
+    ) );
+
 }
 add_action( 'init', 'dynamic_block' );
+
+//create dynamic category
+
+function custom_category( $categories ) {
+	
+	$categories[] = array(
+		'slug'  => 'custom-block-category',
+		'title' => 'Dynamic Blocks'
+	);
+
+	return $categories;
+}
+
+if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) ) {
+	add_filter( 'block_categories_all', 'custom_category' );
+} else {
+	add_filter( 'block_categories', 'custom_category' );
+}

@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "create-block/columns",
+    "version": "0.1.0",
+    "title": "Post Columns",
+    "icon": "columns",
+    "category": "custom-block-category",
+    "attributes": {
+        "columns": {
+            "type": "array",
+            "default": [
+                {
+                    "title": "",
+                    "content": ""
+                },
+                {
+                    "title": "",
+                    "content": ""
+                }
+            ]
+        },
+        "bgColor": {
+            "type": "string"
+        },
+        "textColor": {
+            "type": "string"
+        }
+    },
+    "textdomain": "columns",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
+}
